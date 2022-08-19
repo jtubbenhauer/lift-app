@@ -4,6 +4,9 @@ import { useEffect } from "react";
 import { Router } from "next/router";
 import NProgress from "nprogress";
 import { SessionProvider } from "next-auth/react";
+import { ChakraProvider } from "@chakra-ui/react";
+import { theme } from "../styles/theme";
+import Layout from "../components/layout/Layout";
 
 function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
   useEffect(() => {
@@ -23,7 +26,11 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
 
   return (
     <SessionProvider session={session}>
-      <Component {...pageProps} />
+      <ChakraProvider theme={theme}>
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
+      </ChakraProvider>
     </SessionProvider>
   );
 }
