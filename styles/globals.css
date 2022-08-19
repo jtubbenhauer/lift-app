@@ -14,3 +14,15 @@ a {
 * {
   box-sizing: border-box;
 }
+
+.logo {
+  font-weight: 800;
+  text-align: center;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  background: linear-gradient(90deg, #7F2EBE 9.95%, #6D6CA8 90.97%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}

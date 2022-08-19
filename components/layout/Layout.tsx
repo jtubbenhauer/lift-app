@@ -1,6 +1,6 @@
 import React from "react";
 import { Box, Flex, Spacer } from "@chakra-ui/react";
-import MobileMenu from "./MobileMenu";
+import Navbar from "./Navbar";
 
 interface Props {
   children: React.ReactNode;
@@ -8,11 +8,10 @@ interface Props {
 
 function Layout({ children }: Props) {
   return (
-    <Flex direction="column" h="100vh">
+    <>
+      <Navbar />
       <Box as="main">{children}</Box>
-      <Spacer />
-      <MobileMenu />
-    </Flex>
+    </>
   );
 }
 
