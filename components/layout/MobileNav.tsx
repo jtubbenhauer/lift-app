@@ -1,4 +1,4 @@
-import { Link as ChakraLink, Stack } from "@chakra-ui/react";
+import { Flex, Link as ChakraLink, Stack, Text } from "@chakra-ui/react";
 import React from "react";
 import { NavItem } from "./Navbar";
 import Link from "next/link";
@@ -10,10 +10,20 @@ interface Props {
 
 const MobileNav = ({ items, onToggle }: Props) => {
   return (
-    <Stack>
+    <Stack borderBottom={1} borderStyle={"solid"} borderColor="purple.800">
       {items.map((i) => (
         <Link key={i.label} href={i.href} passHref>
-          <ChakraLink onClick={onToggle}>{i.label}</ChakraLink>
+          <ChakraLink onClick={onToggle}>
+            <Text
+              fontWeight={600}
+              fontSize={"lg"}
+              p={4}
+              align={"center"}
+              casing={"uppercase"}
+            >
+              {i.label}
+            </Text>
+          </ChakraLink>
         </Link>
       ))}
     </Stack>

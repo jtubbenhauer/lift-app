@@ -11,6 +11,7 @@ import { CloseIcon, HamburgerIcon } from "@chakra-ui/icons";
 import Logo from "./Logo";
 import { signIn, signOut, useSession } from "next-auth/react";
 import MobileNav from "./MobileNav";
+import DesktopMenu from "./DesktopMenu";
 
 export interface NavItem {
   label: string;
@@ -56,10 +57,14 @@ function Navbar() {
             variant={"ghost"}
           />
         </Box>
-        <Flex flex={1} justify={"center"}>
+        <Flex flex={[1, 1, 0]} pl={{ md: "2rem" }} justify={"center"}>
           <Logo fontSize={36} />
         </Flex>
+
         <Flex flex={1} justify={"end"}>
+          <Flex display={{ base: "none", md: "flex" }} align={"center"}>
+            <DesktopMenu items={NAV_ITEMS} />
+          </Flex>
           {session ? (
             <Button
               colorScheme={"purple"}
