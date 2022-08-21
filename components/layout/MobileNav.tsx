@@ -14,13 +14,7 @@ const MobileNav = ({ items, onToggle }: Props) => {
       {items.map((i) => (
         <Link key={i.label} href={i.href} passHref>
           <ChakraLink onClick={onToggle}>
-            <Text
-              fontWeight={600}
-              fontSize={"lg"}
-              p={4}
-              align={"center"}
-              casing={"uppercase"}
-            >
+            <Text fontWeight={600} fontSize={"lg"} p={4} align={"center"}>
               {i.label}
             </Text>
           </ChakraLink>
