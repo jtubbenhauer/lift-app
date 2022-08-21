@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { SyntheticEvent, useState } from "react";
 import {
+  Button,
   FormControl,
   FormLabel,
   Input,
@@ -12,6 +13,11 @@ function NewProgramForm() {
   const [name, setName] = useState("");
   const [days, setDays] = useState("");
   const [isActive, setIsActive] = useState(false);
+
+  async function handleSubmit(e: SyntheticEvent) {
+    e.preventDefault();
+    console.log(name, days, isActive);
+  }
 
   return (
     <form>
@@ -39,6 +45,9 @@ function NewProgramForm() {
           <FormLabel>Set as current active program?</FormLabel>
           <Switch onChange={() => setIsActive(!isActive)} />
         </FormControl>
+        <Button type={"submit"} onClick={handleSubmit}>
+          Create Program
+        </Button>
       </Stack>
     </form>
   );
