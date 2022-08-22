@@ -8,15 +8,20 @@ import {
   Stack,
   Switch,
 } from "@chakra-ui/react";
+import { programProps } from "../../pages/program/new";
 
-function NewProgramForm() {
-  const [name, setName] = useState("");
-  const [days, setDays] = useState("");
+interface Props {
+  createProgram: ({}: programProps) => void;
+}
+
+function NewProgramForm({ createProgram }: Props) {
+  const [programName, setName] = useState("");
+  const [numDays, setDays] = useState<number | null>(null);
   const [isActive, setIsActive] = useState(false);
 
   async function handleSubmit(e: SyntheticEvent) {
     e.preventDefault();
-    console.log(name, days, isActive);
+    createProgram({ programName, numDays, isActive });
   }
 
   return (
@@ -30,7 +35,7 @@ function NewProgramForm() {
           <FormLabel>Days per week</FormLabel>
           <Select
             placeholder={"Select # of days"}
-            onChange={(e) => setDays(e.target.value)}
+            onChange={(e) => setDays(parseInt(e.target.value))}
           >
             <option>1</option>
             <option>2</option>

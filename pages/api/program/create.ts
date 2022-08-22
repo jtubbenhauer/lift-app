@@ -6,15 +6,15 @@ export default async function handle(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const { name, days, isActive } = req.body;
+  const { programName, numDays, isActive } = req.body;
 
   const session = await getSession({ req });
 
   if (session) {
     const result = await prisma.program.create({
       data: {
-        name: name,
-        numDays: days,
+        name: programName,
+        numDays: numDays,
         isActive: isActive,
         //@ts-ignore
         user: { connect: { email: session.user?.email } },
