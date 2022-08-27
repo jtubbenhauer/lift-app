@@ -64,7 +64,7 @@ model VerificationToken {
 // ------------- App schema
 
 model Program {
-  id       String   @id @default(cuid())
+  id       String   @id @default(cuid()) @unique
   name     String
   numDays  Int
   user     User?    @relation(fields: [userId], references: [id])
@@ -74,7 +74,7 @@ model Program {
 }
 
 model Day {
-  id        String     @id @default(cuid())
+  id        String     @id @default(cuid()) @unique
   name      String
   exercises Exercise[]
   program   Program    @relation(fields: [programId], references: [id])
