@@ -16,7 +16,7 @@ const NewProgram: NextPage = () => {
     isActive,
   }: programProps) => {
     const body = { programName, numDays, isActive };
-    await fetch(`/api/program/create`, {
+    await fetch(`/api/program`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body),

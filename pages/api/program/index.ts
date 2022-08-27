@@ -9,17 +9,21 @@ export default async function handle(
   const { programName, numDays, isActive } = req.body;
 
   const session = await getSession({ req });
+  let result;
 
   if (session) {
-    const result = await prisma.program.create({
-      data: {
-        name: programName,
-        numDays: numDays,
-        isActive: isActive,
-        //@ts-ignore
-        user: { connect: { email: session.user?.email } },
-      },
-    });
+    let email = session.user?.email;
+
+    if (email) {
+      result = await prisma.program.create({
+        data: {
+          name: programName,
+          numDays: numDays,
+          isActive: isActive,
+          user: { connect: { email: email } },
+        },
+      });
+    }
     res.status(200).json({ result });
   }
 }
