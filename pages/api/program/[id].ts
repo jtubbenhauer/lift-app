@@ -6,10 +6,12 @@ export default async function handle(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const id = req.query.id as string;
+  const id = Array.isArray(req.query.id) ? req.query.id[0] : req.query.id;
 
   if (req.method === "DELETE") {
-    await handleDelete(id, res);
+    if (id) {
+      await handleDelete(id, res);
+    }
   }
 
   if (req.method === "GET") {

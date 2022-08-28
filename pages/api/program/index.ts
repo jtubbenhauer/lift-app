@@ -9,13 +9,14 @@ export default async function handle(
   const { programName, numDays, isActive } = req.body;
 
   const session = await getSession({ req });
-  let result;
+  let newProgram;
+  let newDays;
 
   if (session) {
     let email = session.user?.email;
 
     if (email) {
-      result = await prisma.program.create({
+      newProgram = await prisma.program.create({
         data: {
           name: programName,
           numDays: numDays,
@@ -24,6 +25,14 @@ export default async function handle(
         },
       });
     }
-    res.status(200).json({ result });
+
+    if (newProgram) {
+      let daysArr = [];
+      for (let i = 0; i < numDays; i++) {
+        daysArr.push({ programId: newProgram.id });
+      }
+      newDays = await prisma.day.createMany({ data: daysArr });
+    }
+    res.status(200).json({ newProgram, newDays });
   }
 }

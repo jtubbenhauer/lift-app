@@ -1,6 +1,6 @@
 import { NextPage } from "next";
 import { Flex, Heading } from "@chakra-ui/react";
-import NewProgramForm from "../../components/program/newProgramForm";
+import NewProgramForm from "../../components/program/NewProgramForm";
 import Router from "next/router";
 
 export interface programProps {
@@ -21,7 +21,7 @@ const NewProgram: NextPage = () => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body),
     }).then((res) =>
-      res.json().then((data) => Router.push(`/program/${data.result.id}`))
+      res.json().then((data) => Router.push(`/program/${data.newProgram.id}`))
     );
   };
 
