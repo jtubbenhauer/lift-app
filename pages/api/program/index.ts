@@ -29,7 +29,7 @@ export default async function handle(
     if (newProgram) {
       let daysArr = [];
       for (let i = 0; i < numDays; i++) {
-        daysArr.push({ programId: newProgram.id });
+        daysArr.push({ programId: newProgram.id, name: `Day ${i + 1}` });
       }
       newDays = await prisma.day.createMany({ data: daysArr });
     }

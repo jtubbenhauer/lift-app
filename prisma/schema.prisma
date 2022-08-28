@@ -77,7 +77,7 @@ model Day {
   id        String     @id @default(cuid()) @unique
   name      String?
   exercises Exercise[]
-  program   Program    @relation(fields: [programId], references: [id])
+  program   Program    @relation(fields: [programId], references: [id], onDelete: Cascade)
   programId String
 }
 

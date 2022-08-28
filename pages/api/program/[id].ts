@@ -1,6 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { prisma } from "../../../utils/prismaClient";
-import { Program } from "@prisma/client";
 
 export default async function handle(
   req: NextApiRequest,
@@ -20,14 +19,14 @@ export default async function handle(
     });
     res.json(program);
   }
-}
 
-async function handleDelete(id: string, res: NextApiResponse) {
-  const program: Program = await prisma.program.delete({
-    where: {
-      id: id,
-    },
-  });
+  async function handleDelete(id: string, res: NextApiResponse) {
+    const program = await prisma.program.delete({
+      where: {
+        id: id,
+      },
+    });
 
-  res.json(program);
+    res.json(program);
+  }
 }
