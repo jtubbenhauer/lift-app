@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import { Day } from "@prisma/client";
-import { Flex } from "@chakra-ui/react";
+import { Button, Flex } from "@chakra-ui/react";
+import EditableField from "../EditableField";
 
 interface Props {
   day: Day;
@@ -8,7 +9,22 @@ interface Props {
 }
 
 function DayCard({ day, numDay }: Props) {
-  return <Flex direction={"column"}>Day {numDay}</Flex>;
+  const [title, setTitle] = useState(`Day ${numDay}`);
+  console.log(day);
+  return (
+    <Flex
+      direction={"column"}
+      bgColor={"gray.700"}
+      minW={"30rem"}
+      rounded={"lg"}
+      boxShadow={"lg"}
+      align={"center"}
+      justify={"center"}
+    >
+      <EditableField title={title} setTitle={setTitle} />
+      <Button colorScheme={"purple"}>Add Exercise</Button>
+    </Flex>
+  );
 }
 
 export default DayCard;

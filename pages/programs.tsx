@@ -1,5 +1,5 @@
 import { GetServerSideProps, NextPage } from "next";
-import { Box, Button, Flex } from "@chakra-ui/react";
+import { Box, Button, Flex, Text } from "@chakra-ui/react";
 import Link from "next/link";
 import { unstable_getServerSession } from "next-auth";
 import { authOptions } from "./api/auth/[...nextauth]";
@@ -24,6 +24,9 @@ const Programs: NextPage<Props> = ({ programs }) => {
         <Button>New Program</Button>
       </Link>
       <Flex direction={"column"} gap={4}>
+        {!programs.length && (
+          <Text fontStyle={"italic"}>Add a program to get started!</Text>
+        )}
         {programs.map((program) => (
           <ProgramCard key={program.id} program={program} />
         ))}
