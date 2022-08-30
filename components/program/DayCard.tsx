@@ -7,22 +7,15 @@ import ExerciseCard from "./ExerciseCard";
 interface Props {
   day: Day;
   index: number;
-  setDayData: React.Dispatch<React.SetStateAction<Day[]>>;
-  dayData: Day[];
-  exerciseData: Exercise[];
-  setExerciseData: Dispatch<SetStateAction<Exercise[]>>;
+  setDayData: Dispatch<
+    SetStateAction<(Day & { exercises: Exercise[] })[] | undefined>
+  >;
+  dayData: (Day & { exercises: Exercise[] })[] | undefined;
 }
 
-function DayCard({
-  day,
-  index,
-  setDayData,
-  dayData,
-  exerciseData,
-  setExerciseData,
-}: Props) {
+function DayCard({ day, index, setDayData, dayData }: Props) {
   const handleTitleChange = (e: string) => {
-    const newDayData: Day[] = dayData.map((d) => {
+    const newDayData = dayData?.map((d) => {
       if (d.id === day.id) {
         return { ...d, name: e };
       }
@@ -46,23 +39,17 @@ function DayCard({
       p={6}
     >
       <Flex align={"center"} justify={"space-between"} w={"full"}>
-        <EditableField
-          title={dayData[index].name || ""}
-          onChange={handleTitleChange}
-        />
+        {dayData && (
+          <EditableField
+            title={dayData && dayData[index].name}
+            onChange={handleTitleChange}
+          />
+        )}
         <Button colorScheme={"purple"} onClick={handleAddExercise}>
           Add Exercise
         </Button>
       </Flex>
-      <Flex direction={"column"}>
-        {exerciseData.map((exercise) => (
-          <ExerciseCard
-            key={exercise.id}
-            exercise={exercise}
-            setExerciseData={setExerciseData}
-          />
-        ))}
-      </Flex>
+      <Flex direction={"column"}></Flex>
     </Flex>
   );
 }

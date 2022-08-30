@@ -12,7 +12,7 @@ import {
 import { CheckIcon, CloseIcon, EditIcon } from "@chakra-ui/icons";
 
 interface Props {
-  title: string;
+  title: string | null;
   onChange: (e: string) => void;
 }
 
@@ -53,7 +53,7 @@ function EditableField({ title, onChange }: Props) {
   return (
     <Editable
       textAlign="center"
-      defaultValue={title}
+      defaultValue={title || ''}
       fontSize="2xl"
       isPreviewFocusable={false}
       onChange={(e) => onChange(e)}

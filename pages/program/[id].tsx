@@ -12,26 +12,20 @@ interface IParams extends ParsedUrlQuery {
   id: string;
 }
 
-interface ProgramProps extends Program {
-  days: Day[];
-  program: Program;
-  exercises: Exercise[];
+interface Props {
+  program:  (Program & {days: (Day & {exercises: Exercise[]})[]}) | null
 }
 
-interface ExerciseProps extends Day {
-  exercises: Exercise[];
-}
 
-const ProgramPage: NextPage<ProgramProps> = ({ program, days, exercises }) => {
-  const [title, setTitle] = useState(program.name);
-  const [dayData, setDayData] = useState(days);
-  const [exerciseData, setExerciseData] = useState(exercises);
+const ProgramPage: NextPage<Props> = ({program} ) => {
+  const [title, setTitle] = useState(program?.name);
+  const [dayData, setDayData] = useState(program?.days);
 
   const toast = useToast();
 
   const handleDelete = async (e: SyntheticEvent) => {
     e.preventDefault();
-    await fetch(`/api/program/${program.id}`, {
+    await fetch(`/api/program/${program?.id}`, {
       method: "DELETE",
     }).then((res) => Router.push("/programs"));
   };
@@ -41,7 +35,7 @@ const ProgramPage: NextPage<ProgramProps> = ({ program, days, exercises }) => {
 
     const body = { program: { ...program, name: title }, days: dayData };
 
-    await fetch(`/api/program/${program.id}`, {
+    await fetch(`/api/program/${program?.id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body),
@@ -59,7 +53,7 @@ const ProgramPage: NextPage<ProgramProps> = ({ program, days, exercises }) => {
   return (
     <Box maxW={"1200px"} m={"0 auto"}>
       <Flex m={4} justify={"space-between"} align={"center"}>
-        <EditableField title={title} onChange={setTitle} />
+        <EditableField title={title || ''} onChange={setTitle} />
         <Flex gap={4} m={4} align={"center"} justify={"center"}>
           <Button colorScheme={"green"} onClick={(e) => handleSave(e)}>
             Save Program
@@ -70,15 +64,13 @@ const ProgramPage: NextPage<ProgramProps> = ({ program, days, exercises }) => {
         </Flex>
       </Flex>
       <SimpleGrid spacing={10} columns={{ base: 1, md: 2 }} p={4}>
-        {days?.map((day, index) => (
+        {program?.days.map((day, index) => (
           <DayCard
             key={index}
             day={day}
             index={index}
             setDayData={setDayData}
             dayData={dayData}
-            exerciseData={exerciseData}
-            setExerciseData={setExerciseData}
           />
         ))}
       </SimpleGrid>
@@ -91,14 +83,10 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   const program = await prisma.program.findUnique({
     where: { id: id },
-    include: { days: { include: { exercises: true } } },
+    include: { days: { include: { exercises: true} } },
   });
 
-  const days = program?.days.map((day) => day);
-
-  const exercises = days?.map((day) => day.exercises);
-
-  return { props: { program, days, exercises } };
+  return { props: { program } };
 };
 
 export default ProgramPage;
