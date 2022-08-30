@@ -1,16 +1,9 @@
 import { GetServerSideProps, NextPage } from "next";
-import {
-  Box,
-  Button,
-  Flex,
-  Heading,
-  SimpleGrid,
-  useToast,
-} from "@chakra-ui/react";
+import { Box, Button, Flex, SimpleGrid, useToast } from "@chakra-ui/react";
 import { prisma } from "../../utils/prismaClient";
-import { Day, Program } from "@prisma/client";
+import { Day, Program, Exercise } from "@prisma/client";
 import { ParsedUrlQuery } from "querystring";
-import { SyntheticEvent, useEffect, useState } from "react";
+import { SyntheticEvent, useState } from "react";
 import Router from "next/router";
 import DayCard from "../../components/program/DayCard";
 import EditableField from "../../components/EditableField";
@@ -21,11 +14,19 @@ interface IParams extends ParsedUrlQuery {
 
 interface ProgramProps extends Program {
   days: Day[];
+  program: Program;
+  exercises: Exercise[];
 }
 
-const ProgramPage: NextPage<ProgramProps> = (program) => {
+interface ExerciseProps extends Day {
+  exercises: Exercise[];
+}
+
+const ProgramPage: NextPage<ProgramProps> = ({ program, days, exercises }) => {
   const [title, setTitle] = useState(program.name);
-  const [dayData, setDayData] = useState(program.days);
+  const [dayData, setDayData] = useState(days);
+  const [exerciseData, setExerciseData] = useState(exercises);
+
   const toast = useToast();
 
   const handleDelete = async (e: SyntheticEvent) => {
@@ -69,13 +70,15 @@ const ProgramPage: NextPage<ProgramProps> = (program) => {
         </Flex>
       </Flex>
       <SimpleGrid spacing={10} columns={{ base: 1, md: 2 }} p={4}>
-        {program.days.map((day, index) => (
+        {days?.map((day, index) => (
           <DayCard
             key={index}
             day={day}
             index={index}
             setDayData={setDayData}
             dayData={dayData}
+            exerciseData={exerciseData}
+            setExerciseData={setExerciseData}
           />
         ))}
       </SimpleGrid>
@@ -91,7 +94,11 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     include: { days: { include: { exercises: true } } },
   });
 
-  return { props: { ...program } };
+  const days = program?.days.map((day) => day);
+
+  const exercises = days?.map((day) => day.exercises);
+
+  return { props: { program, days, exercises } };
 };
 
 export default ProgramPage;
