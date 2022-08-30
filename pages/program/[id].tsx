@@ -16,27 +16,48 @@ interface ProgramProps extends Program {
   days: Day[];
 }
 
-const ProgramPage: NextPage<ProgramProps> = ({ name, days, id }) => {
-  const [title, setTitle] = useState(name);
+const ProgramPage: NextPage<ProgramProps> = (program) => {
+  const [title, setTitle] = useState(program.name);
+  const [dayData, setDayData] = useState(program.days);
 
   const handleDelete = async (e: SyntheticEvent) => {
     e.preventDefault();
-    await fetch(`/api/program/${id}`, {
+    await fetch(`/api/program/${program.id}`, {
       method: "DELETE",
     }).then((res) => Router.push("/programs"));
+  };
+
+  const handleSave = async (e: SyntheticEvent) => {
+    e.preventDefault();
+
+    const body = { ...program, name: title };
+
+    await fetch(`/api/program/${program.id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    });
   };
 
   return (
     <Flex justify={"center"} align={"center"}>
       <Flex direction={"column"} align={"center"} justify={"center"} w={"md"}>
-        <EditableField title={title} setTitle={setTitle} />
+        <EditableField title={title} onChange={setTitle} />
         <Flex direction={"column"} gap={6}>
-          {days.map((day, index) => (
-            <DayCard key={index} day={day} numDay={index + 1} />
+          {program.days.map((day, index) => (
+            <DayCard
+              key={index}
+              day={day}
+              index={index}
+              setDayData={setDayData}
+              dayData={dayData}
+            />
           ))}
         </Flex>
         <Flex gap={4} m={4}>
-          <Button colorScheme={"green"}>Save Program</Button>
+          <Button colorScheme={"green"} onClick={(e) => handleSave(e)}>
+            Save Program
+          </Button>
           <Button colorScheme={"red"} onClick={(e) => handleDelete(e)}>
             Delete
           </Button>

@@ -13,6 +13,12 @@ export default async function handle(
     }
   }
 
+  if (req.method === "PUT") {
+    if (id) {
+      await handleUpdate(id, res, req);
+    }
+  }
+
   if (req.method === "GET") {
     const program = await prisma.program.findUnique({
       where: { id: id },
@@ -28,5 +34,19 @@ export default async function handle(
     });
 
     res.json(program);
+  }
+
+  async function handleUpdate(
+    id: string,
+    res: NextApiResponse,
+    req: NextApiRequest
+  ) {
+    const program = req.body;
+    const updateProgram = await prisma.program.update({
+      where: {
+        id: program.id,
+      },
+      data: { name: program.name },
+    });
   }
 }

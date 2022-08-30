@@ -13,10 +13,10 @@ import { CheckIcon, CloseIcon, EditIcon } from "@chakra-ui/icons";
 
 interface Props {
   title: string;
-  setTitle: (e: string) => void;
+  onChange: (e: string) => void;
 }
 
-function EditableField({ title, setTitle }: Props) {
+function EditableField({ title, onChange }: Props) {
   function EditableControls() {
     const {
       isEditing,
@@ -56,7 +56,7 @@ function EditableField({ title, setTitle }: Props) {
       defaultValue={title}
       fontSize="2xl"
       isPreviewFocusable={false}
-      onChange={(e) => setTitle(e)}
+      onChange={(e) => onChange(e)}
     >
       <Flex gap={4} align={"center"} justify={"center"}>
         <EditablePreview />
