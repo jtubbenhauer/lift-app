@@ -1,5 +1,12 @@
 import { GetServerSideProps, NextPage } from "next";
-import { Button, Flex, Heading } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Flex,
+  Heading,
+  SimpleGrid,
+  useToast,
+} from "@chakra-ui/react";
 import { prisma } from "../../utils/prismaClient";
 import { Day, Program } from "@prisma/client";
 import { ParsedUrlQuery } from "querystring";
@@ -19,6 +26,7 @@ interface ProgramProps extends Program {
 const ProgramPage: NextPage<ProgramProps> = (program) => {
   const [title, setTitle] = useState(program.name);
   const [dayData, setDayData] = useState(program.days);
+  const toast = useToast();
 
   const handleDelete = async (e: SyntheticEvent) => {
     e.preventDefault();
@@ -30,31 +38,28 @@ const ProgramPage: NextPage<ProgramProps> = (program) => {
   const handleSave = async (e: SyntheticEvent) => {
     e.preventDefault();
 
-    const body = { ...program, name: title };
+    const body = { program: { ...program, name: title }, days: dayData };
 
     await fetch(`/api/program/${program.id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body),
-    });
+    }).then(() =>
+      toast({
+        title: "Program saved",
+        status: "success",
+        duration: 9000,
+        isClosable: true,
+        position: "top",
+      })
+    );
   };
 
   return (
-    <Flex justify={"center"} align={"center"}>
-      <Flex direction={"column"} align={"center"} justify={"center"} w={"md"}>
+    <Box maxW={"1200px"} m={"0 auto"}>
+      <Flex m={4} justify={"space-between"} align={"center"}>
         <EditableField title={title} onChange={setTitle} />
-        <Flex direction={"column"} gap={6}>
-          {program.days.map((day, index) => (
-            <DayCard
-              key={index}
-              day={day}
-              index={index}
-              setDayData={setDayData}
-              dayData={dayData}
-            />
-          ))}
-        </Flex>
-        <Flex gap={4} m={4}>
+        <Flex gap={4} m={4} align={"center"} justify={"center"}>
           <Button colorScheme={"green"} onClick={(e) => handleSave(e)}>
             Save Program
           </Button>
@@ -63,7 +68,18 @@ const ProgramPage: NextPage<ProgramProps> = (program) => {
           </Button>
         </Flex>
       </Flex>
-    </Flex>
+      <SimpleGrid spacing={10} columns={{ base: 1, md: 2 }} p={4}>
+        {program.days.map((day, index) => (
+          <DayCard
+            key={index}
+            day={day}
+            index={index}
+            setDayData={setDayData}
+            dayData={dayData}
+          />
+        ))}
+      </SimpleGrid>
+    </Box>
   );
 };
 
