@@ -1,4 +1,4 @@
-import React from "react";
+import React, { SyntheticEvent } from "react";
 import {
   ButtonGroup,
   Editable,
@@ -53,7 +53,7 @@ function EditableField({ title, onChange }: Props) {
   return (
     <Editable
       textAlign="center"
-      defaultValue={title || ''}
+      defaultValue={title || ""}
       fontSize="2xl"
       isPreviewFocusable={false}
       onChange={(e) => onChange(e)}

@@ -1,25 +1,18 @@
 import { GetServerSideProps, NextPage } from "next";
 import { Box, Button, Flex, SimpleGrid, useToast } from "@chakra-ui/react";
 import { prisma } from "../../utils/prismaClient";
-import { Day, Program, Exercise } from "@prisma/client";
-import { ParsedUrlQuery } from "querystring";
+import { Day } from "@prisma/client";
 import { SyntheticEvent, useState } from "react";
 import Router from "next/router";
 import DayCard from "../../components/program/DayCard";
 import EditableField from "../../components/EditableField";
+import { ProgramState } from "../../types/propTypes";
+import { IParams } from "../../types/paramTypes";
 
-interface IParams extends ParsedUrlQuery {
-  id: string;
-}
+const ProgramPage: NextPage<ProgramState> = ({ program }) => {
+  const [programState, setProgramState] = useState(program);
 
-interface Props {
-  program:  (Program & {days: (Day & {exercises: Exercise[]})[]}) | null
-}
-
-
-const ProgramPage: NextPage<Props> = ({program} ) => {
-  const [title, setTitle] = useState(program?.name);
-  const [dayData, setDayData] = useState(program?.days);
+  console.log(program);
 
   const toast = useToast();
 
@@ -30,15 +23,20 @@ const ProgramPage: NextPage<Props> = ({program} ) => {
     }).then((res) => Router.push("/programs"));
   };
 
+  const handleTitleChange = (e: string) => {
+    setProgramState((programState: any) => ({
+      ...programState,
+      name: e,
+    }));
+  };
+
   const handleSave = async (e: SyntheticEvent) => {
     e.preventDefault();
-
-    const body = { program: { ...program, name: title }, days: dayData };
 
     await fetch(`/api/program/${program?.id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body),
+      body: JSON.stringify(programState),
     }).then(() =>
       toast({
         title: "Program saved",
@@ -53,7 +51,10 @@ const ProgramPage: NextPage<Props> = ({program} ) => {
   return (
     <Box maxW={"1200px"} m={"0 auto"}>
       <Flex m={4} justify={"space-between"} align={"center"}>
-        <EditableField title={title || ''} onChange={setTitle} />
+        <EditableField
+          title={programState?.name || ""}
+          onChange={handleTitleChange}
+        />
         <Flex gap={4} m={4} align={"center"} justify={"center"}>
           <Button colorScheme={"green"} onClick={(e) => handleSave(e)}>
             Save Program
@@ -64,13 +65,13 @@ const ProgramPage: NextPage<Props> = ({program} ) => {
         </Flex>
       </Flex>
       <SimpleGrid spacing={10} columns={{ base: 1, md: 2 }} p={4}>
-        {program?.days.map((day, index) => (
+        {program?.days.map((day: Day, index: number) => (
           <DayCard
             key={index}
             day={day}
             index={index}
-            setDayData={setDayData}
-            dayData={dayData}
+            programState={programState}
+            setProgramState={setProgramState}
           />
         ))}
       </SimpleGrid>
@@ -83,7 +84,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   const program = await prisma.program.findUnique({
     where: { id: id },
-    include: { days: { include: { exercises: true} } },
+    include: { days: { include: { exercises: true } } },
   });
 
   return { props: { program } };

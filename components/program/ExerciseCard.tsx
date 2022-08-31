@@ -4,10 +4,9 @@ import { Exercise } from "@prisma/client";
 
 interface Props {
   exercise: Exercise;
-  setExerciseData?: Dispatch<SetStateAction<Exercise[]>>;
 }
 
-function ExerciseCard({ exercise, setExerciseData }: Props) {
+function ExerciseCard({ exercise }: Props) {
   return <Flex>{exercise.id}</Flex>;
 }
 

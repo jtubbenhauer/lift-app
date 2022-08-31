@@ -5,23 +5,25 @@ import EditableField from "../EditableField";
 import ExerciseCard from "./ExerciseCard";
 
 interface Props {
-  day: Day;
   index: number;
-  setDayData: Dispatch<
-    SetStateAction<(Day & { exercises: Exercise[] })[] | undefined>
-  >;
-  dayData: (Day & { exercises: Exercise[] })[] | undefined;
+  day: Day;
+  programState: any;
+  setProgramState: Dispatch<any>;
 }
 
-function DayCard({ day, index, setDayData, dayData }: Props) {
+function DayCard({ index, programState, setProgramState, day }: Props) {
   const handleTitleChange = (e: string) => {
-    const newDayData = dayData?.map((d) => {
-      if (d.id === day.id) {
-        return { ...d, name: e };
+    const newDays = programState.days.map((item: Day) => {
+      if (item.id === day.id) {
+        return { ...item, name: e };
       }
-      return d;
+      return item;
     });
-    setDayData(newDayData);
+
+    setProgramState((programState: any) => ({
+      ...programState,
+      days: newDays,
+    }));
   };
 
   const handleAddExercise = () => {};
@@ -37,19 +39,17 @@ function DayCard({ day, index, setDayData, dayData }: Props) {
       p={6}
     >
       <Flex align={"center"} justify={"space-between"} w={"full"}>
-        {dayData && (
-          <EditableField
-            title={dayData && dayData[index].name}
-            onChange={handleTitleChange}
-          />
-        )}
+        <EditableField
+          title={programState.days[index].name}
+          onChange={handleTitleChange}
+        />
         <Button colorScheme={"purple"} onClick={handleAddExercise}>
           Add Exercise
         </Button>
-        {dayData &&
-          dayData[index].exercises.map((exercise) => (
-            <ExerciseCard key={exercise.id} exercise={exercise} />
-          ))}
+
+        {programState.days[index].exercises.map((exercise: Exercise) => (
+          <ExerciseCard exercise={exercise} key={exercise.id} />
+        ))}
       </Flex>
       <Flex direction={"column"}></Flex>
     </Flex>

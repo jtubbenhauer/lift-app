@@ -41,7 +41,7 @@ export default async function handle(
     res: NextApiResponse,
     req: NextApiRequest
   ) {
-    const { program, days } = req.body;
+    const program = req.body;
 
     const updateProgram = await prisma.program.update({
       where: {
@@ -50,13 +50,13 @@ export default async function handle(
       data: { name: program.name },
     });
 
-    for (let i = 0; i < days.length; i++) {
+    for (let i = 0; i < program.days.length; i++) {
       await prisma.day.update({
         where: {
-          id: days[i].id,
+          id: program.days[i].id,
         },
         data: {
-          name: days[i].name,
+          name: program.days[i].name,
         },
       });
     }
