@@ -35,15 +35,14 @@ function Navbar() {
   const { isOpen, onToggle } = useDisclosure();
 
   return (
-    <Box>
+    <Box borderBottom={1} borderStyle={"solid"} borderColor={"purple.800"}>
       <Flex
         as={"nav"}
         justify={"space-between"}
         align={"center"}
-        borderBottom={1}
-        borderStyle={"solid"}
-        borderColor={"purple.800"}
         minH={"70px"}
+        maxW={"1200px"}
+        m={"0 auto"}
       >
         <Box display={{ base: "block", md: "none" }} flex={1}>
           <IconButton

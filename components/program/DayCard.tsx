@@ -24,9 +24,7 @@ function DayCard({ day, index, setDayData, dayData }: Props) {
     setDayData(newDayData);
   };
 
-  const handleAddExercise = () => {
-    console.log(day.id);
-  };
+  const handleAddExercise = () => {};
 
   return (
     <Flex
@@ -48,6 +46,10 @@ function DayCard({ day, index, setDayData, dayData }: Props) {
         <Button colorScheme={"purple"} onClick={handleAddExercise}>
           Add Exercise
         </Button>
+        {dayData &&
+          dayData[index].exercises.map((exercise) => (
+            <ExerciseCard key={exercise.id} exercise={exercise} />
+          ))}
       </Flex>
       <Flex direction={"column"}></Flex>
     </Flex>
