@@ -4,9 +4,10 @@ import { Exercise } from "@prisma/client";
 
 interface Props {
   exercise: Exercise;
+  index: number;
 }
 
-function ExerciseCard({ exercise }: Props) {
+function ExerciseCard({ exercise, index }: Props) {
   return <Flex direction={"column"}>{exercise.id}</Flex>;
 }
 

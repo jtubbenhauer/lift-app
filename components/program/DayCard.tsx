@@ -28,7 +28,35 @@ function DayCard({ index, programState, setProgramState, day }: Props) {
     }));
   };
 
-  const handleAddExercise = () => {};
+  const handleAddExercise = async () => {
+    await fetch("/api/exercise", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(day.id),
+    });
+    // programState.days[index].exercises.push({
+    //   id: "1",
+    //   name: "asdsad",
+    //   dayId: programState.days[index].id,
+    // });
+    //
+    // const newExercise = {
+    //   id: "",
+    //   name: "asdsd",
+    //   dayId: programState.days[index].id,
+    // };
+    //
+    // const newDays = programState.days.map((day) => {
+    //   return day;
+    // });
+    //
+    // newDays[index].exercises.push(newExercise);
+    //
+    // setProgramState((programState) => ({
+    //   ...programState,
+    //   days: newDays,
+    // }));
+  };
 
   return (
     <Flex
@@ -49,8 +77,8 @@ function DayCard({ index, programState, setProgramState, day }: Props) {
           Add Exercise
         </Button>
       </Flex>
-      {programState.days[index].exercises.map((exercise: Exercise) => (
-        <ExerciseCard exercise={exercise} key={exercise.id} />
+      {programState.days[index].exercises.map((exercise, index) => (
+        <ExerciseCard exercise={exercise} key={exercise.id} index={index} />
       ))}
     </Flex>
   );
