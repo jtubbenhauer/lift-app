@@ -3,15 +3,17 @@ import { Day, Exercise } from "@prisma/client";
 import { Box, Button, Flex } from "@chakra-ui/react";
 import EditableField from "../EditableField";
 import ExerciseCard from "./ExerciseCard";
+import { ProgramState } from "../../types/propTypes";
 
 interface Props {
   index: number;
   day: Day;
-  programState: any;
-  setProgramState: Dispatch<any>;
+  programState: ProgramState;
+  setProgramState: Dispatch<SetStateAction<ProgramState>>;
 }
 
 function DayCard({ index, programState, setProgramState, day }: Props) {
+  console.log(programState.days[index].name);
   const handleTitleChange = (e: string) => {
     const newDays = programState.days.map((item: Day) => {
       if (item.id === day.id) {
@@ -46,12 +48,10 @@ function DayCard({ index, programState, setProgramState, day }: Props) {
         <Button colorScheme={"purple"} onClick={handleAddExercise}>
           Add Exercise
         </Button>
-
-        {programState.days[index].exercises.map((exercise: Exercise) => (
-          <ExerciseCard exercise={exercise} key={exercise.id} />
-        ))}
       </Flex>
-      <Flex direction={"column"}></Flex>
+      {programState.days[index].exercises.map((exercise: Exercise) => (
+        <ExerciseCard exercise={exercise} key={exercise.id} />
+      ))}
     </Flex>
   );
 }

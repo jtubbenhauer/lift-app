@@ -9,11 +9,12 @@ import EditableField from "../../components/EditableField";
 import { ProgramState } from "../../types/propTypes";
 import { IParams } from "../../types/paramTypes";
 
-const ProgramPage: NextPage<ProgramState> = ({ program }) => {
+interface Props {
+  program: ProgramState;
+}
+
+const ProgramPage: NextPage<Props> = ({ program }) => {
   const [programState, setProgramState] = useState(program);
-
-  console.log(program);
-
   const toast = useToast();
 
   const handleDelete = async (e: SyntheticEvent) => {
@@ -65,7 +66,7 @@ const ProgramPage: NextPage<ProgramState> = ({ program }) => {
         </Flex>
       </Flex>
       <SimpleGrid spacing={10} columns={{ base: 1, md: 2 }} p={4}>
-        {program?.days.map((day: Day, index: number) => (
+        {programState.days.map((day: Day, index: number) => (
           <DayCard
             key={index}
             day={day}

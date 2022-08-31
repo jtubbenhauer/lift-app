@@ -12,7 +12,7 @@ import {
 import { CheckIcon, CloseIcon, EditIcon } from "@chakra-ui/icons";
 
 interface Props {
-  title: string | null;
+  title: string | null | undefined;
   onChange: (e: string) => void;
 }
 
