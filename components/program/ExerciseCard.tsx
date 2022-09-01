@@ -4,7 +4,7 @@ import React, {
   SyntheticEvent,
   useState,
 } from "react";
-import { Flex, IconButton, Select } from "@chakra-ui/react";
+import { Button, Flex, IconButton, Select } from "@chakra-ui/react";
 import { Exercise } from "@prisma/client";
 import { ProgramState } from "../../types/propTypes";
 import EditableField from "../EditableField";
@@ -29,10 +29,10 @@ function ExerciseCard({
   const [numSets, setNumSets] = useState(0);
 
   const handleTitleChange = (e: string) => {
-    console.log(e);
     setProgramState((programState) => ({
       ...programState,
       days: [...programState.days].map((day) => {
+        // If we're at the right day
         if (day.id == programState.days[dayIndex].id) {
           day.exercises[index].name = e;
           return day;
@@ -65,38 +65,27 @@ function ExerciseCard({
   };
 
   return (
-    <Flex direction={"column"} gap={4}>
-      <Flex gap={10} align={"center"}>
+    <Flex direction={"column"} w={"100%"} p={"0 1rem"} align={"center"}>
+      <Flex gap={10} align={"center"} justify={"space-between"} w={"100%"}>
         <EditableField
           title={exerciseState.name}
           onChange={handleTitleChange}
+          fontSize={"lg"}
         />
-        <IconButton
-          colorScheme={"red"}
-          aria-label={"delete-icon"}
-          icon={<CloseIcon />}
-          variant={"outline"}
-          size={"sm"}
-          onClick={handleDeleteExercise}
-        />
+        <Flex gap={4}>
+          <Button variant={"outline"} colorScheme={"green"} size={"sm"}>
+            Edit Sets
+          </Button>
+          <IconButton
+            colorScheme={"red"}
+            aria-label={"delete-icon"}
+            icon={<CloseIcon />}
+            variant={"outline"}
+            size={"sm"}
+            onClick={handleDeleteExercise}
+          />
+        </Flex>
       </Flex>
-      <Select
-        placeholder={"# of Sets"}
-        onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
-          setNumSets(parseInt(e.target.value))
-        }
-      >
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-        <option value="4">4</option>
-        <option value="5">5</option>
-        <option value="6">6</option>
-        <option value="7">7</option>
-        <option value="8">8</option>
-        <option value="9">9</option>
-        <option value="10">10</option>
-      </Select>
     </Flex>
   );
 }

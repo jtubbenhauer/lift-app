@@ -5,7 +5,7 @@ import EditableField from "../EditableField";
 import ExerciseCard from "./ExerciseCard";
 import { ProgramState } from "../../types/propTypes";
 import cuid from "cuid";
-import { AddIcon, PlusSquareIcon } from "@chakra-ui/icons";
+import { AddIcon, CloseIcon, PlusSquareIcon } from "@chakra-ui/icons";
 
 interface Props {
   dayIndex: number;
@@ -70,55 +70,68 @@ function DayCard({ dayIndex, programState, setProgramState, day }: Props) {
         align={"center"}
         justify={"space-between"}
         gap={6}
-        p={6}
+        p={4}
         position={"relative"}
         overflow={"hidden"}
         minH={250}
         h={"100%"}
       >
-        <Box
-          position={"absolute"}
-          right={-10}
-          top={-140}
-          opacity={"0.04"}
-          zIndex={0}
+        <Flex
+          align={"center"}
+          justify={"space-between"}
+          w={"full"}
+          zIndex={10}
+          direction={{ base: "column", md: "row" }}
+          _before={{
+            content: '""',
+            bgColor: "gray.800",
+            opacity: 0.5,
+            position: "absolute",
+            width: "100%",
+            top: 0,
+            left: 0,
+            height: { base: "110px", md: "70px" },
+            zIndex: 0,
+          }}
         >
-          <Text fontSize={"20rem"} userSelect={"none"} fontWeight={"bold"}>
-            {dayIndex + 1}
-          </Text>
-        </Box>
-
-        <Flex align={"center"} justify={"space-between"} w={"full"} zIndex={10}>
-          <EditableField
-            title={programState.days[dayIndex].name}
-            onChange={handleTitleChange}
-          />
+          <Box zIndex={20}>
+            <EditableField
+              title={programState.days[dayIndex].name}
+              onChange={handleTitleChange}
+            />
+          </Box>
           <Button
             colorScheme={"purple"}
             onClick={handleAddExercise}
             variant={"outline"}
+            size={"sm"}
+            mt={{ base: 3, md: 0 }}
             leftIcon={<AddIcon />}
+            zIndex={20}
           >
             Add Exercise
           </Button>
         </Flex>
-        {programState.days[dayIndex].exercises.map((exercise, index) => (
-          <ExerciseCard
-            exercise={exercise}
-            key={exercise.id}
-            index={index}
-            programState={programState}
-            setProgramState={setProgramState}
-            dayIndex={dayIndex}
-          />
-        ))}
+
+        <Flex direction={"column"} w={"100%"} gap={4} mt={4}>
+          {programState.days[dayIndex].exercises.map((exercise, index) => (
+            <ExerciseCard
+              exercise={exercise}
+              key={exercise.id}
+              index={index}
+              programState={programState}
+              setProgramState={setProgramState}
+              dayIndex={dayIndex}
+            />
+          ))}
+        </Flex>
         <Button
           variant={"outline"}
           colorScheme={"red"}
           onClick={handleRemoveDay}
           zIndex={10}
         >
-          Remove Day
+          Delete
         </Button>
       </Flex>
     </Fade>

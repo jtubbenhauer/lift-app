@@ -86,6 +86,7 @@ const ProgramPage: NextPage<Props> = ({ program }) => {
         <EditableField
           title={programState?.name || ""}
           onChange={handleTitleChange}
+          fontSize={"3xl"}
         />
         <Flex gap={4} m={4} align={"center"} justify={"center"}>
           <ButtonGroup variant={"outline"}>
