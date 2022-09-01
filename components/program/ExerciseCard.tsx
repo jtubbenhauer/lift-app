@@ -30,6 +30,17 @@ function ExerciseCard({
 
   const handleTitleChange = (e: string) => {
     console.log(e);
+    setProgramState((programState) => ({
+      ...programState,
+      days: [...programState.days].map((day) => {
+        if (day.id == programState.days[dayIndex].id) {
+          day.exercises[index].name = e;
+          return day;
+        } else {
+          return day;
+        }
+      }),
+    }));
   };
 
   const handleDeleteExercise = async (e: SyntheticEvent) => {
