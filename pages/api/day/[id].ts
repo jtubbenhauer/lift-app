@@ -15,7 +15,9 @@ export default async function handle(
 }
 
 const handleDelete = async (id: string, res: NextApiResponse) => {
-  const deleteDay = await prisma.day.delete({ where: { id: id } });
+  const deleteDay = await prisma.day
+    .delete({ where: { id: id } })
+    .catch(() => console.log("Item doesn't exist"));
 
   res.json(deleteDay);
 };

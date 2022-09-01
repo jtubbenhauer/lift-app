@@ -1,6 +1,6 @@
 import React, { Dispatch, SetStateAction, SyntheticEvent } from "react";
 import { Day } from "@prisma/client";
-import { Button, Fade, Flex, useDisclosure } from "@chakra-ui/react";
+import { Box, Button, Fade, Flex, Text } from "@chakra-ui/react";
 import EditableField from "../EditableField";
 import ExerciseCard from "./ExerciseCard";
 import { ProgramState } from "../../types/propTypes";
@@ -14,8 +14,6 @@ interface Props {
 }
 
 function DayCard({ index, programState, setProgramState, day }: Props) {
-  const { isOpen } = useDisclosure();
-
   const handleTitleChange = (e: string) => {
     const newDays = programState.days.map((item: Day) => {
       if (item.id === day.id) {
@@ -62,17 +60,33 @@ function DayCard({ index, programState, setProgramState, day }: Props) {
   };
 
   return (
-    <Fade>
+    <Fade in>
       <Flex
         direction={"column"}
         bgColor={"gray.700"}
         rounded={"lg"}
         boxShadow={"lg"}
         align={"center"}
+        justify={"space-between"}
         gap={6}
         p={6}
+        position={"relative"}
+        overflow={"hidden"}
+        minH={250}
       >
-        <Flex align={"center"} justify={"space-between"} w={"full"}>
+        <Box
+          position={"absolute"}
+          right={0}
+          bottom={-100}
+          opacity={"0.04"}
+          zIndex={0}
+        >
+          <Text fontSize={"18rem"} userSelect={"none"} fontWeight={"bold"}>
+            {index + 1}
+          </Text>
+        </Box>
+
+        <Flex align={"center"} justify={"space-between"} w={"full"} zIndex={10}>
           <EditableField
             title={programState.days[index].name}
             onChange={handleTitleChange}
@@ -92,6 +106,7 @@ function DayCard({ index, programState, setProgramState, day }: Props) {
           variant={"outline"}
           colorScheme={"red"}
           onClick={handleRemoveDay}
+          zIndex={10}
         >
           Remove Day
         </Button>

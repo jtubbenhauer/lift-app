@@ -64,6 +64,7 @@ export default async function handle(
         create: {
           id: day.id,
           programId: day.programId,
+          name: day.name,
         },
       });
       if (day.exercises.length) {

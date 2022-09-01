@@ -3,7 +3,6 @@ import {
   Box,
   Button,
   ButtonGroup,
-  Fade,
   Flex,
   SimpleGrid,
   useDisclosure,
@@ -25,7 +24,6 @@ interface Props {
 const ProgramPage: NextPage<Props> = ({ program }) => {
   const [programState, setProgramState] = useState(program);
   const toast = useToast();
-  const { isOpen, onOpen, onToggle } = useDisclosure();
 
   const handleDelete = async (e: SyntheticEvent) => {
     e.preventDefault();
@@ -46,11 +44,10 @@ const ProgramPage: NextPage<Props> = ({ program }) => {
     const newDay: DayState = {
       exercises: [],
       id: cuid(),
-      name: null,
+      name: `Day ${programState.days.length + 1}`,
       isCurrent: false,
       programId: programState.id,
     };
-    console.log(newDay);
 
     if (programState.days.length < 7) {
       setProgramState((programState) => ({
