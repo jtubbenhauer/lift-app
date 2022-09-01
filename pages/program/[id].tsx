@@ -44,7 +44,7 @@ const ProgramPage: NextPage<Props> = ({ program }) => {
     const newDay: DayState = {
       exercises: [],
       id: cuid(),
-      name: `Day ${programState.days.length + 1}`,
+      name: `Untitled Day`,
       isCurrent: false,
       programId: programState.id,
     };
@@ -106,7 +106,7 @@ const ProgramPage: NextPage<Props> = ({ program }) => {
           <DayCard
             key={day.id}
             day={day}
-            index={index}
+            dayIndex={index}
             programState={programState}
             setProgramState={setProgramState}
           />

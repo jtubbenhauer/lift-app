@@ -5,15 +5,16 @@ import EditableField from "../EditableField";
 import ExerciseCard from "./ExerciseCard";
 import { ProgramState } from "../../types/propTypes";
 import cuid from "cuid";
+import { AddIcon, PlusSquareIcon } from "@chakra-ui/icons";
 
 interface Props {
-  index: number;
+  dayIndex: number;
   day: Day;
   programState: ProgramState;
   setProgramState: Dispatch<SetStateAction<ProgramState>>;
 }
 
-function DayCard({ index, programState, setProgramState, day }: Props) {
+function DayCard({ dayIndex, programState, setProgramState, day }: Props) {
   const handleTitleChange = (e: string) => {
     const newDays = programState.days.map((item: Day) => {
       if (item.id === day.id) {
@@ -31,15 +32,15 @@ function DayCard({ index, programState, setProgramState, day }: Props) {
   const handleAddExercise = async () => {
     const newExercise = {
       id: cuid(),
-      name: "New Exercise",
-      dayId: programState.days[index].id,
+      name: "Untitled Exercise",
+      dayId: programState.days[dayIndex].id,
     };
 
     const newDays = programState.days.map((day) => {
       return day;
     });
 
-    newDays[index].exercises.push(newExercise);
+    newDays[dayIndex].exercises.push(newExercise);
 
     setProgramState((programState) => ({
       ...programState,
@@ -73,34 +74,43 @@ function DayCard({ index, programState, setProgramState, day }: Props) {
         position={"relative"}
         overflow={"hidden"}
         minH={250}
+        h={"100%"}
       >
         <Box
           position={"absolute"}
-          right={0}
-          bottom={-100}
+          right={-10}
+          top={-140}
           opacity={"0.04"}
           zIndex={0}
         >
-          <Text fontSize={"18rem"} userSelect={"none"} fontWeight={"bold"}>
-            {index + 1}
+          <Text fontSize={"20rem"} userSelect={"none"} fontWeight={"bold"}>
+            {dayIndex + 1}
           </Text>
         </Box>
 
         <Flex align={"center"} justify={"space-between"} w={"full"} zIndex={10}>
           <EditableField
-            title={programState.days[index].name}
+            title={programState.days[dayIndex].name}
             onChange={handleTitleChange}
           />
           <Button
             colorScheme={"purple"}
             onClick={handleAddExercise}
             variant={"outline"}
+            leftIcon={<AddIcon />}
           >
             Add Exercise
           </Button>
         </Flex>
-        {programState.days[index].exercises.map((exercise, index) => (
-          <ExerciseCard exercise={exercise} key={exercise.id} index={index} />
+        {programState.days[dayIndex].exercises.map((exercise, index) => (
+          <ExerciseCard
+            exercise={exercise}
+            key={exercise.id}
+            index={index}
+            programState={programState}
+            setProgramState={setProgramState}
+            dayIndex={dayIndex}
+          />
         ))}
         <Button
           variant={"outline"}

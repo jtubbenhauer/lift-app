@@ -30,11 +30,13 @@ function EditableField({ title, onChange }: Props) {
         <IconButton
           aria-label={"submit-icon"}
           icon={<CheckIcon />}
+          variant={"outline"}
           {...getSubmitButtonProps()}
         />
         <IconButton
           aria-label={"close-icon"}
           icon={<CloseIcon />}
+          variant={"outline"}
           {...getCancelButtonProps()}
         />
       </ButtonGroup>
@@ -44,6 +46,7 @@ function EditableField({ title, onChange }: Props) {
           aria-label={"edit-icon"}
           size="sm"
           icon={<EditIcon />}
+          variant={"outline"}
           {...getEditButtonProps()}
         />
       </Flex>
