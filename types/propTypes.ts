@@ -4,6 +4,6 @@ export interface ProgramState extends Program {
   days: DayState[];
 }
 
-interface DayState extends Day {
+export interface DayState extends Day {
   exercises: Exercise[];
 }

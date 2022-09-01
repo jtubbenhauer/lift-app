@@ -66,9 +66,9 @@ const ProgramPage: NextPage<Props> = ({ program }) => {
         </Flex>
       </Flex>
       <SimpleGrid spacing={10} columns={{ base: 1, md: 2 }} p={4}>
-        {programState.days.map((day: Day, index: number) => (
+        {programState.days.map((day, index) => (
           <DayCard
-            key={index}
+            key={day.id}
             day={day}
             index={index}
             programState={programState}

@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { prisma } from "../../../utils/prismaClient";
+import { ProgramState } from "../../../types/propTypes";
 
 export default async function handle(
   req: NextApiRequest,
@@ -41,7 +42,9 @@ export default async function handle(
     res: NextApiResponse,
     req: NextApiRequest
   ) {
-    const program = req.body;
+    const program: ProgramState = req.body;
+
+    console.log(program);
 
     const updateProgram = await prisma.program.update({
       where: {
@@ -50,16 +53,34 @@ export default async function handle(
       data: { name: program.name },
     });
 
-    for (let i = 0; i < program.days.length; i++) {
+    for (const day of program.days) {
       await prisma.day.update({
         where: {
-          id: program.days[i].id,
+          id: day.id,
         },
         data: {
-          name: program.days[i].name,
+          name: day.name,
         },
       });
+      if (day.exercises.length) {
+        for (const exercise of day.exercises) {
+          await prisma.exercise.upsert({
+            where: {
+              id: exercise.id,
+            },
+            update: {
+              name: exercise.name,
+            },
+            create: {
+              id: exercise.id,
+              name: exercise.name,
+              dayId: day.id,
+            },
+          });
+        }
+      }
     }
+
     res.json(updateProgram);
   }
 }

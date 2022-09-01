@@ -8,7 +8,7 @@ interface Props {
 }
 
 function ExerciseCard({ exercise, index }: Props) {
-  return <Flex direction={"column"}>{exercise.id}</Flex>;
+  return <Flex direction={"column"}>{exercise.name}</Flex>;
 }
 
 export default ExerciseCard;

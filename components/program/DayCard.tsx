@@ -1,9 +1,16 @@
-import React, { Dispatch, SetStateAction, useState } from "react";
+import React, {
+  Dispatch,
+  SetStateAction,
+  SyntheticEvent,
+  useState,
+} from "react";
 import { Day, Exercise } from "@prisma/client";
 import { Box, Button, Flex } from "@chakra-ui/react";
 import EditableField from "../EditableField";
 import ExerciseCard from "./ExerciseCard";
-import { ProgramState } from "../../types/propTypes";
+import { ProgramState, DayState } from "../../types/propTypes";
+import cuid from "cuid";
+import { program } from "@babel/types";
 
 interface Props {
   index: number;
@@ -13,7 +20,6 @@ interface Props {
 }
 
 function DayCard({ index, programState, setProgramState, day }: Props) {
-  console.log(programState.days[index].name);
   const handleTitleChange = (e: string) => {
     const newDays = programState.days.map((item: Day) => {
       if (item.id === day.id) {
@@ -29,33 +35,34 @@ function DayCard({ index, programState, setProgramState, day }: Props) {
   };
 
   const handleAddExercise = async () => {
-    await fetch("/api/exercise", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(day.id),
+    const newExercise = {
+      id: cuid(),
+      name: "New Exercise",
+      dayId: programState.days[index].id,
+    };
+
+    const newDays = programState.days.map((day) => {
+      return day;
     });
-    // programState.days[index].exercises.push({
-    //   id: "1",
-    //   name: "asdsad",
-    //   dayId: programState.days[index].id,
-    // });
-    //
-    // const newExercise = {
-    //   id: "",
-    //   name: "asdsd",
-    //   dayId: programState.days[index].id,
-    // };
-    //
-    // const newDays = programState.days.map((day) => {
-    //   return day;
-    // });
-    //
-    // newDays[index].exercises.push(newExercise);
-    //
-    // setProgramState((programState) => ({
-    //   ...programState,
-    //   days: newDays,
-    // }));
+
+    newDays[index].exercises.push(newExercise);
+
+    setProgramState((programState) => ({
+      ...programState,
+      days: newDays,
+    }));
+  };
+
+  const handleRemoveDay = async (e: SyntheticEvent) => {
+    e.preventDefault();
+
+    setProgramState((programState) => ({
+      ...programState,
+      days: programState.days.filter((d) => d.id !== day.id),
+    }));
+    await fetch(`/api/day/${day.id}`, {
+      method: "DELETE",
+    });
   };
 
   return (
@@ -80,6 +87,9 @@ function DayCard({ index, programState, setProgramState, day }: Props) {
       {programState.days[index].exercises.map((exercise, index) => (
         <ExerciseCard exercise={exercise} key={exercise.id} index={index} />
       ))}
+      <Button colorScheme={"red"} onClick={handleRemoveDay}>
+        Remove Day
+      </Button>
     </Flex>
   );
 }
