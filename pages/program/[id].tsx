@@ -1,13 +1,22 @@
 import { GetServerSideProps, NextPage } from "next";
-import { Box, Button, Flex, SimpleGrid, useToast } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  ButtonGroup,
+  Fade,
+  Flex,
+  SimpleGrid,
+  useDisclosure,
+  useToast,
+} from "@chakra-ui/react";
 import { prisma } from "../../utils/prismaClient";
-import { Day } from "@prisma/client";
 import { SyntheticEvent, useState } from "react";
 import Router from "next/router";
 import DayCard from "../../components/program/DayCard";
 import EditableField from "../../components/EditableField";
-import { ProgramState } from "../../types/propTypes";
+import { DayState, ProgramState } from "../../types/propTypes";
 import { IParams } from "../../types/paramTypes";
+import cuid from "cuid";
 
 interface Props {
   program: ProgramState;
@@ -16,6 +25,7 @@ interface Props {
 const ProgramPage: NextPage<Props> = ({ program }) => {
   const [programState, setProgramState] = useState(program);
   const toast = useToast();
+  const { isOpen, onOpen, onToggle } = useDisclosure();
 
   const handleDelete = async (e: SyntheticEvent) => {
     e.preventDefault();
@@ -31,6 +41,25 @@ const ProgramPage: NextPage<Props> = ({ program }) => {
     }));
   };
 
+  const handleAddDay = async (e: SyntheticEvent) => {
+    e.preventDefault();
+    const newDay: DayState = {
+      exercises: [],
+      id: cuid(),
+      name: null,
+      isCurrent: false,
+      programId: programState.id,
+    };
+    console.log(newDay);
+
+    if (programState.days.length < 7) {
+      setProgramState((programState) => ({
+        ...programState,
+        days: [...programState.days, newDay],
+      }));
+    }
+  };
+
   const handleSave = async (e: SyntheticEvent) => {
     e.preventDefault();
 
@@ -42,7 +71,7 @@ const ProgramPage: NextPage<Props> = ({ program }) => {
       toast({
         title: "Program saved",
         status: "success",
-        duration: 9000,
+        duration: 2500,
         isClosable: true,
         position: "top",
       })
@@ -51,18 +80,28 @@ const ProgramPage: NextPage<Props> = ({ program }) => {
 
   return (
     <Box maxW={"1200px"} m={"0 auto"}>
-      <Flex m={4} justify={"space-between"} align={"center"}>
+      <Flex
+        m={4}
+        justify={"space-between"}
+        align={"center"}
+        direction={{ base: "column", md: "row" }}
+      >
         <EditableField
           title={programState?.name || ""}
           onChange={handleTitleChange}
         />
         <Flex gap={4} m={4} align={"center"} justify={"center"}>
-          <Button colorScheme={"green"} onClick={(e) => handleSave(e)}>
-            Save Program
-          </Button>
-          <Button colorScheme={"red"} onClick={(e) => handleDelete(e)}>
-            Delete
-          </Button>
+          <ButtonGroup variant={"outline"}>
+            <Button colorScheme={"purple"} onClick={handleAddDay}>
+              Add Day
+            </Button>
+            <Button colorScheme={"green"} onClick={(e) => handleSave(e)}>
+              Save Program
+            </Button>
+            <Button colorScheme={"red"} onClick={(e) => handleDelete(e)}>
+              Delete
+            </Button>
+          </ButtonGroup>
         </Flex>
       </Flex>
       <SimpleGrid spacing={10} columns={{ base: 1, md: 2 }} p={4}>

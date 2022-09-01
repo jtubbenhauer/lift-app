@@ -54,12 +54,16 @@ export default async function handle(
     });
 
     for (const day of program.days) {
-      await prisma.day.update({
+      await prisma.day.upsert({
         where: {
           id: day.id,
         },
-        data: {
+        update: {
           name: day.name,
+        },
+        create: {
+          id: day.id,
+          programId: day.programId,
         },
       });
       if (day.exercises.length) {

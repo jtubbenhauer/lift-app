@@ -1,16 +1,10 @@
-import React, {
-  Dispatch,
-  SetStateAction,
-  SyntheticEvent,
-  useState,
-} from "react";
-import { Day, Exercise } from "@prisma/client";
-import { Box, Button, Flex } from "@chakra-ui/react";
+import React, { Dispatch, SetStateAction, SyntheticEvent } from "react";
+import { Day } from "@prisma/client";
+import { Button, Fade, Flex, useDisclosure } from "@chakra-ui/react";
 import EditableField from "../EditableField";
 import ExerciseCard from "./ExerciseCard";
-import { ProgramState, DayState } from "../../types/propTypes";
+import { ProgramState } from "../../types/propTypes";
 import cuid from "cuid";
-import { program } from "@babel/types";
 
 interface Props {
   index: number;
@@ -20,6 +14,8 @@ interface Props {
 }
 
 function DayCard({ index, programState, setProgramState, day }: Props) {
+  const { isOpen } = useDisclosure();
+
   const handleTitleChange = (e: string) => {
     const newDays = programState.days.map((item: Day) => {
       if (item.id === day.id) {
@@ -66,31 +62,41 @@ function DayCard({ index, programState, setProgramState, day }: Props) {
   };
 
   return (
-    <Flex
-      direction={"column"}
-      bgColor={"gray.700"}
-      rounded={"lg"}
-      boxShadow={"lg"}
-      align={"center"}
-      gap={6}
-      p={6}
-    >
-      <Flex align={"center"} justify={"space-between"} w={"full"}>
-        <EditableField
-          title={programState.days[index].name}
-          onChange={handleTitleChange}
-        />
-        <Button colorScheme={"purple"} onClick={handleAddExercise}>
-          Add Exercise
+    <Fade>
+      <Flex
+        direction={"column"}
+        bgColor={"gray.700"}
+        rounded={"lg"}
+        boxShadow={"lg"}
+        align={"center"}
+        gap={6}
+        p={6}
+      >
+        <Flex align={"center"} justify={"space-between"} w={"full"}>
+          <EditableField
+            title={programState.days[index].name}
+            onChange={handleTitleChange}
+          />
+          <Button
+            colorScheme={"purple"}
+            onClick={handleAddExercise}
+            variant={"outline"}
+          >
+            Add Exercise
+          </Button>
+        </Flex>
+        {programState.days[index].exercises.map((exercise, index) => (
+          <ExerciseCard exercise={exercise} key={exercise.id} index={index} />
+        ))}
+        <Button
+          variant={"outline"}
+          colorScheme={"red"}
+          onClick={handleRemoveDay}
+        >
+          Remove Day
         </Button>
       </Flex>
-      {programState.days[index].exercises.map((exercise, index) => (
-        <ExerciseCard exercise={exercise} key={exercise.id} index={index} />
-      ))}
-      <Button colorScheme={"red"} onClick={handleRemoveDay}>
-        Remove Day
-      </Button>
-    </Flex>
+    </Fade>
   );
 }
 

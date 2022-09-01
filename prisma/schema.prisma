@@ -64,9 +64,9 @@ model VerificationToken {
 // ------------- App schema
 
 model Program {
-  id       String   @id @default(cuid()) @unique
+  id       String   @id @unique @default(cuid())
   name     String
-  numDays  Int
+  numDays  Int?
   user     User?    @relation(fields: [userId], references: [id])
   userId   String?
   days     Day[]
@@ -74,8 +74,9 @@ model Program {
 }
 
 model Day {
-  id        String     @id @default(cuid()) @unique
+  id        String     @id @unique @default(cuid())
   name      String?
+  isCurrent Boolean?   @default(false)
   exercises Exercise[]
   program   Program    @relation(fields: [programId], references: [id], onDelete: Cascade)
   programId String
@@ -85,13 +86,13 @@ model Exercise {
   id    String  @id @default(cuid())
   name  String
   sets  Set[]
-  day   Day?    @relation(fields: [dayId], references: [id])
+  day   Day?    @relation(fields: [dayId], references: [id], onDelete: Cascade)
   dayId String?
 }
 
 model Set {
   id         String    @id @default(cuid())
-  Exercise   Exercise? @relation(fields: [exerciseId], references: [id])
+  Exercise   Exercise? @relation(fields: [exerciseId], references: [id], onDelete: Cascade)
   exerciseId String?
   weight     Int
   reps       Int
