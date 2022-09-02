@@ -68,7 +68,6 @@ function DayCard({ dayIndex, programState, setProgramState, day }: Props) {
         rounded={"lg"}
         boxShadow={"lg"}
         align={"center"}
-        justify={"space-between"}
         gap={6}
         p={4}
         position={"relative"}
@@ -113,7 +112,14 @@ function DayCard({ dayIndex, programState, setProgramState, day }: Props) {
           </Button>
         </Flex>
 
-        <Flex direction={"column"} w={"100%"} gap={4} mt={4}>
+        <Flex
+          grow={1}
+          direction={"column"}
+          w={"100%"}
+          gap={4}
+          mt={4}
+          justify={"start"}
+        >
           {programState.days[dayIndex].exercises.map((exercise, index) => (
             <ExerciseCard
               exercise={exercise}

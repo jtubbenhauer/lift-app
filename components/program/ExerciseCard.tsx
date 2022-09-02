@@ -4,11 +4,12 @@ import React, {
   SyntheticEvent,
   useState,
 } from "react";
-import { Button, Flex, IconButton, Select } from "@chakra-ui/react";
+import { Button, Flex, IconButton, useDisclosure } from "@chakra-ui/react";
 import { Exercise } from "@prisma/client";
 import { ProgramState } from "../../types/propTypes";
 import EditableField from "../EditableField";
 import { CloseIcon } from "@chakra-ui/icons";
+import SetModal from "./SetModal";
 
 interface Props {
   exercise: Exercise;
@@ -26,7 +27,7 @@ function ExerciseCard({
   dayIndex,
 }: Props) {
   const exerciseState = programState.days[dayIndex].exercises[index];
-  const [numSets, setNumSets] = useState(0);
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const handleTitleChange = (e: string) => {
     setProgramState((programState) => ({
@@ -66,6 +67,7 @@ function ExerciseCard({
 
   return (
     <Flex direction={"column"} w={"100%"} p={"0 1rem"} align={"center"}>
+      <SetModal isOpen={isOpen} onOpen={onOpen} onClose={onClose} />
       <Flex gap={10} align={"center"} justify={"space-between"} w={"100%"}>
         <EditableField
           title={exerciseState.name}
@@ -73,7 +75,12 @@ function ExerciseCard({
           fontSize={"lg"}
         />
         <Flex gap={4}>
-          <Button variant={"outline"} colorScheme={"green"} size={"sm"}>
+          <Button
+            variant={"outline"}
+            colorScheme={"green"}
+            size={"sm"}
+            onClick={onOpen}
+          >
             Edit Sets
           </Button>
           <IconButton
