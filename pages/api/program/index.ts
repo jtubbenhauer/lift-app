@@ -14,6 +14,7 @@ export default async function handle(
 
   if (session) {
     let email = session.user?.email;
+    //TODO need to pass back an error if user not signed in.
 
     if (email) {
       newProgram = await prisma.program.create({

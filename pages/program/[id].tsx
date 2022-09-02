@@ -4,6 +4,7 @@ import {
   Button,
   ButtonGroup,
   Flex,
+  Heading,
   SimpleGrid,
   useDisclosure,
   useToast,
@@ -122,7 +123,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   const program = await prisma.program.findUnique({
     where: { id: id },
-    include: { days: { include: { exercises: true } } },
+    include: { days: { include: { exercises: { include: { sets: true } } } } },
   });
 
   return { props: { program } };

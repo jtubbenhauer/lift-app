@@ -1,9 +1,9 @@
 import React, { Dispatch, SetStateAction, SyntheticEvent } from "react";
 import { Day } from "@prisma/client";
-import { Box, Button, Fade, Flex, Text } from "@chakra-ui/react";
+import { Box, Button, Fade, Flex, IconButton, Text } from "@chakra-ui/react";
 import EditableField from "../EditableField";
 import ExerciseCard from "./ExerciseCard";
-import { ProgramState } from "../../types/propTypes";
+import { ExerciseState, ProgramState } from "../../types/propTypes";
 import cuid from "cuid";
 import { AddIcon, CloseIcon, PlusSquareIcon } from "@chakra-ui/icons";
 
@@ -30,22 +30,29 @@ function DayCard({ dayIndex, programState, setProgramState, day }: Props) {
   };
 
   const handleAddExercise = async () => {
-    const newExercise = {
+    const newExercise: ExerciseState = {
       id: cuid(),
       name: "Untitled Exercise",
       dayId: programState.days[dayIndex].id,
+      sets: [],
     };
 
-    const newDays = programState.days.map((day) => {
-      return day;
-    });
+    const newProgram: ProgramState = JSON.parse(JSON.stringify(programState));
 
-    newDays[dayIndex].exercises.push(newExercise);
+    newProgram.days[dayIndex].exercises.push(newExercise);
 
-    setProgramState((programState) => ({
-      ...programState,
-      days: newDays,
-    }));
+    setProgramState(newProgram);
+
+    // const newDays = programState.days.map((day) => {
+    //   return day;
+    // });
+    //
+    // newDays[dayIndex].exercises.push(newExercise);
+    //
+    // setProgramState((programState) => ({
+    //   ...programState,
+    //   days: newDays,
+    // }));
   };
 
   const handleRemoveDay = async (e: SyntheticEvent) => {
@@ -99,17 +106,26 @@ function DayCard({ dayIndex, programState, setProgramState, day }: Props) {
               onChange={handleTitleChange}
             />
           </Box>
-          <Button
-            colorScheme={"purple"}
-            onClick={handleAddExercise}
-            variant={"outline"}
-            size={"sm"}
-            mt={{ base: 3, md: 0 }}
-            leftIcon={<AddIcon />}
-            zIndex={20}
-          >
-            Add Exercise
-          </Button>
+          <Flex gap={4} align={"center"}>
+            <Button
+              colorScheme={"purple"}
+              onClick={handleAddExercise}
+              variant={"outline"}
+              size={"sm"}
+              mt={{ base: 3, md: 0 }}
+              leftIcon={<AddIcon />}
+              zIndex={20}
+            >
+              Add Exercise
+            </Button>
+            <IconButton
+              aria-label={"close-icon"}
+              icon={<CloseIcon />}
+              size="sm"
+              colorScheme={"red"}
+              variant={"outline"}
+            />
+          </Flex>
         </Flex>
 
         <Flex
@@ -124,21 +140,13 @@ function DayCard({ dayIndex, programState, setProgramState, day }: Props) {
             <ExerciseCard
               exercise={exercise}
               key={exercise.id}
-              index={index}
+              exerciseIndex={index}
               programState={programState}
               setProgramState={setProgramState}
               dayIndex={dayIndex}
             />
           ))}
         </Flex>
-        <Button
-          variant={"outline"}
-          colorScheme={"red"}
-          onClick={handleRemoveDay}
-          zIndex={10}
-        >
-          Delete
-        </Button>
       </Flex>
     </Fade>
   );

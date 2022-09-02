@@ -82,6 +82,25 @@ export default async function handle(
               dayId: day.id,
             },
           });
+          if (exercise.sets.length) {
+            for (const set of exercise.sets) {
+              await prisma.set.upsert({
+                where: {
+                  id: set.id,
+                },
+                update: {
+                  weight: set.weight,
+                  reps: set.reps,
+                },
+                create: {
+                  id: set.id,
+                  exerciseId: exercise.id,
+                  weight: set.weight,
+                  reps: set.reps,
+                },
+              });
+            }
+          }
         }
       }
     }

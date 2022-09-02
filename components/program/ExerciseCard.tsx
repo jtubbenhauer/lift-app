@@ -6,14 +6,14 @@ import React, {
 } from "react";
 import { Button, Flex, IconButton, useDisclosure } from "@chakra-ui/react";
 import { Exercise } from "@prisma/client";
-import { ProgramState } from "../../types/propTypes";
+import { ExerciseState, ProgramState } from "../../types/propTypes";
 import EditableField from "../EditableField";
 import { CloseIcon } from "@chakra-ui/icons";
 import SetModal from "./SetModal";
 
 interface Props {
   exercise: Exercise;
-  index: number;
+  exerciseIndex: number;
   programState: ProgramState;
   setProgramState: Dispatch<SetStateAction<ProgramState>>;
   dayIndex: number;
@@ -21,12 +21,12 @@ interface Props {
 
 function ExerciseCard({
   exercise,
-  index,
+  exerciseIndex,
   programState,
   setProgramState,
   dayIndex,
 }: Props) {
-  const exerciseState = programState.days[dayIndex].exercises[index];
+  const exerciseState = programState.days[dayIndex].exercises[exerciseIndex];
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const handleTitleChange = (e: string) => {
@@ -35,7 +35,7 @@ function ExerciseCard({
       days: [...programState.days].map((day) => {
         // If we're at the right day
         if (day.id == programState.days[dayIndex].id) {
-          day.exercises[index].name = e;
+          day.exercises[exerciseIndex].name = e;
           return day;
         } else {
           return day;
@@ -67,7 +67,16 @@ function ExerciseCard({
 
   return (
     <Flex direction={"column"} w={"100%"} p={"0 1rem"} align={"center"}>
-      <SetModal isOpen={isOpen} onOpen={onOpen} onClose={onClose} />
+      <SetModal
+        isOpen={isOpen}
+        onOpen={onOpen}
+        onClose={onClose}
+        exerciseState={exerciseState}
+        exerciseIndex={exerciseIndex}
+        programState={programState}
+        dayIndex={dayIndex}
+        setProgramState={setProgramState}
+      />
       <Flex gap={10} align={"center"} justify={"space-between"} w={"100%"}>
         <EditableField
           title={exerciseState.name}
@@ -75,12 +84,7 @@ function ExerciseCard({
           fontSize={"lg"}
         />
         <Flex gap={4}>
-          <Button
-            variant={"outline"}
-            colorScheme={"green"}
-            size={"sm"}
-            onClick={onOpen}
-          >
+          <Button variant={"outline"} size={"sm"} onClick={onOpen}>
             Edit Sets
           </Button>
           <IconButton

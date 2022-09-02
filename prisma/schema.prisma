@@ -5,6 +5,7 @@
 
 generator client {
   provider = "prisma-client-js"
+  output = "./prisma/client"
 }
 
 datasource db {
@@ -66,6 +67,7 @@ model VerificationToken {
 model Program {
   id       String   @id @unique @default(cuid())
   name     String
+  kg       Boolean  @default(true)
   numDays  Int?
   user     User?    @relation(fields: [userId], references: [id])
   userId   String?
@@ -94,6 +96,6 @@ model Set {
   id         String    @id @default(cuid())
   Exercise   Exercise? @relation(fields: [exerciseId], references: [id], onDelete: Cascade)
   exerciseId String?
-  weight     Int
-  reps       Int
+  weight     Int?      @default(50)
+  reps       Int?      @default(8)
 }
