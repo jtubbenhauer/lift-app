@@ -3,7 +3,6 @@ import {
   Button,
   Flex,
   Modal,
-  Text,
   ModalBody,
   ModalCloseButton,
   ModalContent,
@@ -11,7 +10,7 @@ import {
   ModalHeader,
   ModalOverlay,
 } from "@chakra-ui/react";
-import { Exercise, Set } from "../../prisma/prisma/client";
+import { Set } from "../../prisma/prisma/client";
 import { AddIcon } from "@chakra-ui/icons";
 import { ExerciseState, ProgramState } from "../../types/propTypes";
 import SetItem from "./SetItem";
@@ -19,7 +18,6 @@ import cuid from "cuid";
 
 interface Props {
   isOpen: boolean;
-  onOpen: () => void;
   onClose: () => void;
   exerciseState: ExerciseState;
   exerciseIndex: number;
@@ -30,7 +28,6 @@ interface Props {
 
 function SetModal({
   isOpen,
-  onOpen,
   onClose,
   exerciseState,
   exerciseIndex,
@@ -50,7 +47,6 @@ function SetModal({
     newProgram.days[dayIndex].exercises[exerciseIndex].sets.push(newSet);
 
     setProgramState(newProgram);
-    console.log(programState);
   };
 
   return (
@@ -63,11 +59,20 @@ function SetModal({
           <Button leftIcon={<AddIcon />} onClick={handleAddSet}>
             Add Set
           </Button>
-          {programState.days[dayIndex].exercises[exerciseIndex].sets.map(
-            (set) => (
-              <SetItem key={set.id} />
-            )
-          )}
+
+          <Flex direction={"column"} mt={6} gap={6}>
+            {programState.days[dayIndex].exercises[exerciseIndex].sets.map(
+              (set, index) => (
+                <SetItem
+                  key={set.id}
+                  set={set}
+                  setIndex={index}
+                  programState={programState}
+                  setProgramState={setProgramState}
+                />
+              )
+            )}
+          </Flex>
         </ModalBody>
 
         <ModalFooter>

@@ -64,7 +64,7 @@ function EditableField({ title, onChange, fontSize }: Props) {
     >
       <Flex gap={4} align={"center"} justify={"center"}>
         <EditablePreview />
-        <Input as={EditableInput} />
+        <Input maxW={"200px"} as={EditableInput} />
         <EditableControls />
       </Flex>
     </Editable>

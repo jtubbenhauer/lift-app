@@ -69,7 +69,6 @@ function ExerciseCard({
     <Flex direction={"column"} w={"100%"} p={"0 1rem"} align={"center"}>
       <SetModal
         isOpen={isOpen}
-        onOpen={onOpen}
         onClose={onClose}
         exerciseState={exerciseState}
         exerciseIndex={exerciseIndex}

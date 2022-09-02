@@ -42,17 +42,6 @@ function DayCard({ dayIndex, programState, setProgramState, day }: Props) {
     newProgram.days[dayIndex].exercises.push(newExercise);
 
     setProgramState(newProgram);
-
-    // const newDays = programState.days.map((day) => {
-    //   return day;
-    // });
-    //
-    // newDays[dayIndex].exercises.push(newExercise);
-    //
-    // setProgramState((programState) => ({
-    //   ...programState,
-    //   days: newDays,
-    // }));
   };
 
   const handleRemoveDay = async (e: SyntheticEvent) => {
@@ -79,7 +68,7 @@ function DayCard({ dayIndex, programState, setProgramState, day }: Props) {
         p={4}
         position={"relative"}
         overflow={"hidden"}
-        minH={250}
+        minH={290}
         h={"100%"}
       >
         <Flex
@@ -87,6 +76,7 @@ function DayCard({ dayIndex, programState, setProgramState, day }: Props) {
           justify={"space-between"}
           w={"full"}
           zIndex={10}
+          p={"0 1rem"}
           direction={{ base: "column", md: "row" }}
           _before={{
             content: '""',
@@ -124,6 +114,7 @@ function DayCard({ dayIndex, programState, setProgramState, day }: Props) {
               size="sm"
               colorScheme={"red"}
               variant={"outline"}
+              onClick={handleRemoveDay}
             />
           </Flex>
         </Flex>
