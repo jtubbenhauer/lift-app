@@ -195,7 +195,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "C:\\Users\\jackt\\Desktop\\lift-app\\prisma\\prisma\\client",
+      "value": "D:\\Dev\\lift-app\\prisma\\prisma\\client",
       "fromEnvVar": null
     },
     "config": {

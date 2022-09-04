@@ -9,15 +9,28 @@ interface Props {
   setIndex: number;
   programState: ProgramState;
   setProgramState: Dispatch<SetStateAction<ProgramState>>;
+  dayIndex: number;
+  exerciseIndex: number;
 }
 
-function SetItem({ set, setIndex, programState, setProgramState }: Props) {
-  const handleDeleteSet = (e: SyntheticEvent) => {
+function SetItem({
+  set,
+  setIndex,
+  programState,
+  setProgramState,
+  dayIndex,
+  exerciseIndex,
+}: Props) {
+  const handleDeleteSet = async (e: SyntheticEvent) => {
     e.preventDefault();
 
-    const newProgram = JSON.parse(JSON.stringify(programState));
+    const newProgram: ProgramState = JSON.parse(JSON.stringify(programState));
 
-    // Delete item from copy
+    newProgram.days[dayIndex].exercises[exerciseIndex].sets.splice(setIndex, 1);
+
+    setProgramState(newProgram);
+
+    await fetch(`/api/set/${set.id}`, { method: "DELETE" });
   };
 
   return (

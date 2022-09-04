@@ -1,12 +1,7 @@
-import React, {
-  Dispatch,
-  SetStateAction,
-  SyntheticEvent,
-  useState,
-} from "react";
+import React, { Dispatch, SetStateAction, SyntheticEvent } from "react";
 import { Button, Flex, IconButton, useDisclosure } from "@chakra-ui/react";
 import { Exercise } from "@prisma/client";
-import { ExerciseState, ProgramState } from "../../types/propTypes";
+import { ProgramState } from "../../types/propTypes";
 import EditableField from "../EditableField";
 import { CloseIcon } from "@chakra-ui/icons";
 import SetModal from "./SetModal";
@@ -30,38 +25,21 @@ function ExerciseCard({
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const handleTitleChange = (e: string) => {
-    setProgramState((programState) => ({
-      ...programState,
-      days: [...programState.days].map((day) => {
-        // If we're at the right day
-        if (day.id == programState.days[dayIndex].id) {
-          day.exercises[exerciseIndex].name = e;
-          return day;
-        } else {
-          return day;
-        }
-      }),
-    }));
+    const newProgram: ProgramState = JSON.parse(JSON.stringify(programState));
+
+    newProgram.days[dayIndex].exercises[exerciseIndex].name = e;
+
+    setProgramState(newProgram);
   };
 
   const handleDeleteExercise = async (e: SyntheticEvent) => {
     e.preventDefault();
 
-    setProgramState((programState) => ({
-      ...programState,
-      days: [...programState.days].map((day) => {
-        if (day.id == exercise.dayId) {
-          return {
-            ...day,
-            exercises: [...day.exercises].filter(
-              (item) => item.id !== exercise.id
-            ),
-          };
-        } else {
-          return day;
-        }
-      }),
-    }));
+    const newProgram: ProgramState = JSON.parse(JSON.stringify(programState));
+
+    newProgram.days[dayIndex].exercises.splice(exerciseIndex, 1);
+    setProgramState(newProgram);
+
     await fetch(`/api/exercise/${exercise.id}`, { method: "DELETE" });
   };
 

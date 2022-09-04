@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction } from "react";
+import React, { Dispatch, SetStateAction, SyntheticEvent } from "react";
 import {
   Button,
   Flex,
@@ -49,6 +49,11 @@ function SetModal({
     setProgramState(newProgram);
   };
 
+  const handleSave = async (e: SyntheticEvent) => {
+    e.preventDefault();
+    onClose();
+  };
+
   return (
     <Modal isOpen={isOpen} onClose={onClose} isCentered>
       <ModalOverlay />
@@ -67,6 +72,8 @@ function SetModal({
                   key={set.id}
                   set={set}
                   setIndex={index}
+                  dayIndex={dayIndex}
+                  exerciseIndex={exerciseIndex}
                   programState={programState}
                   setProgramState={setProgramState}
                 />
@@ -76,7 +83,11 @@ function SetModal({
         </ModalBody>
 
         <ModalFooter>
-          <Button colorScheme={"green"} variant={"outline"}>
+          <Button
+            colorScheme={"green"}
+            variant={"outline"}
+            onClick={handleSave}
+          >
             Save
           </Button>
         </ModalFooter>

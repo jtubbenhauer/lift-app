@@ -1,11 +1,11 @@
 import React, { Dispatch, SetStateAction, SyntheticEvent } from "react";
 import { Day } from "@prisma/client";
-import { Box, Button, Fade, Flex, IconButton, Text } from "@chakra-ui/react";
+import { Box, Button, Fade, Flex, IconButton } from "@chakra-ui/react";
 import EditableField from "../EditableField";
 import ExerciseCard from "./ExerciseCard";
 import { ExerciseState, ProgramState } from "../../types/propTypes";
 import cuid from "cuid";
-import { AddIcon, CloseIcon, PlusSquareIcon } from "@chakra-ui/icons";
+import { AddIcon, CloseIcon } from "@chakra-ui/icons";
 
 interface Props {
   dayIndex: number;
@@ -16,17 +16,10 @@ interface Props {
 
 function DayCard({ dayIndex, programState, setProgramState, day }: Props) {
   const handleTitleChange = (e: string) => {
-    const newDays = programState.days.map((item: Day) => {
-      if (item.id === day.id) {
-        return { ...item, name: e };
-      }
-      return item;
-    });
+    const newProgram: ProgramState = JSON.parse(JSON.stringify(programState));
+    newProgram.days[dayIndex].name = e;
 
-    setProgramState((programState: any) => ({
-      ...programState,
-      days: newDays,
-    }));
+    setProgramState(newProgram);
   };
 
   const handleAddExercise = async () => {
@@ -47,10 +40,12 @@ function DayCard({ dayIndex, programState, setProgramState, day }: Props) {
   const handleRemoveDay = async (e: SyntheticEvent) => {
     e.preventDefault();
 
-    setProgramState((programState) => ({
-      ...programState,
-      days: programState.days.filter((d) => d.id !== day.id),
-    }));
+    const newProgram: ProgramState = JSON.parse(JSON.stringify(programState));
+
+    newProgram.days.splice(dayIndex, 1);
+
+    setProgramState(newProgram);
+
     await fetch(`/api/day/${day.id}`, {
       method: "DELETE",
     });

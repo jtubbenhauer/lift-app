@@ -2,10 +2,21 @@
 <project version="4">
   <component name="PublishConfigData" remoteFilesAllowedToDisappearOnAutoupload="false">
     <serverData>
-      <paths name="JT FTP">
+      <paths name="AWS">
         <serverdata>
           <mappings>
             <mapping local="$PROJECT_DIR$" web="/" />
+            <mapping local="$PROJECT_DIR$/node_modules/.prisma" web="/" />
+            <mapping local="$PROJECT_DIR$/node_modules/.prisma/client" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="Humbug">
+        <serverdata>
+          <mappings>
+            <mapping local="$PROJECT_DIR$" web="/" />
+            <mapping local="$PROJECT_DIR$/node_modules/.prisma" web="/" />
+            <mapping local="$PROJECT_DIR$/node_modules/.prisma/client" web="/" />
           </mappings>
         </serverdata>
       </paths>

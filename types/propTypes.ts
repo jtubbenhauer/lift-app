@@ -1,4 +1,4 @@
-import { Day, Exercise, Program, Set } from "@prisma/client";
+import { Day, Exercise, Program, Set } from "../prisma/prisma/client";
 
 export interface ProgramState extends Program {
   days: DayState[];
