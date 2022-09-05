@@ -1,8 +1,9 @@
 import type { NextPage } from "next";
 import Head from "next/head";
-import { Button, useColorMode } from "@chakra-ui/react";
+import data from "../data.json";
 
 const Home: NextPage = () => {
+  console.log(data.programs);
   return (
     <div>
       <Head>

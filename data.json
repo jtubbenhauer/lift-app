@@ -1,0 +1,34 @@
+{
+  "user": [
+    {
+      "id": "001",
+      "email": "jack@tubbs.dev",
+      "program": {}
+    }
+  ],
+  "programs": [
+    {
+      "id": "001",
+      "name": "stronglifts",
+      "weeks": [
+        {
+          "deload": false,
+          "days": [
+            {
+              "title": "Bench Day",
+              "sets": [
+                {
+                  "reps": 5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "deload": true,
+          "days": []
+        }
+      ]
+    }
+  ]
+}
