@@ -1,33 +1,30 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
-// prisma generate ------ whenever I change schema
 
 generator client {
   provider = "prisma-client-js"
-  output = "./prisma/client"
 }
 
 datasource db {
+  provider          = "mongodb"
   url               = env("DATABASE_URL")
-  provider          = "mysql"
-  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
 }
 
 // ----------- NextAuth default schema
 
 model Account {
-  id                String  @id @default(cuid())
+  id                String  @id @default(auto()) @map("_id") @db.ObjectId
   userId            String
   type              String
   provider          String
   providerAccountId String
-  refresh_token     String? @db.Text
-  access_token      String? @db.Text
+  refresh_token     String? @db.String
+  access_token      String? @db.String
   expires_at        Int?
   token_type        String?
   scope             String?
-  id_token          String? @db.Text
+  id_token          String? @db.String
   session_state     String?
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -36,7 +33,7 @@ model Account {
 }
 
 model Session {
-  id           String   @id @default(cuid())
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
   sessionToken String   @unique
   userId       String
   expires      DateTime
@@ -44,58 +41,12 @@ model Session {
 }
 
 model User {
-  id            String    @id @default(cuid())
+  id            String    @id @default(auto()) @map("_id") @db.ObjectId
   name          String?
   email         String?   @unique
   emailVerified DateTime?
   image         String?
   accounts      Account[]
   sessions      Session[]
-  programs      Program[]
 }
 
-model VerificationToken {
-  identifier String
-  token      String   @unique
-  expires    DateTime
-
-  @@unique([identifier, token])
-}
-
-// ------------- App schema
-
-model Program {
-  id       String   @id @unique @default(cuid())
-  name     String
-  kg       Boolean  @default(true)
-  numDays  Int?
-  user     User?    @relation(fields: [userId], references: [id])
-  userId   String?
-  days     Day[]
-  isActive Boolean? @default(false)
-}
-
-model Day {
-  id        String     @id @unique @default(cuid())
-  name      String?
-  isCurrent Boolean?   @default(false)
-  exercises Exercise[]
-  program   Program    @relation(fields: [programId], references: [id], onDelete: Cascade)
-  programId String
-}
-
-model Exercise {
-  id    String  @id @default(cuid())
-  name  String
-  sets  Set[]
-  day   Day?    @relation(fields: [dayId], references: [id], onDelete: Cascade)
-  dayId String?
-}
-
-model Set {
-  id         String    @id @default(cuid())
-  Exercise   Exercise? @relation(fields: [exerciseId], references: [id], onDelete: Cascade)
-  exerciseId String?
-  weight     Int?      @default(50)
-  reps       Int?      @default(8)
-}
